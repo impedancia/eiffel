@@ -7,7 +7,7 @@ note
 class
 	DIGRAPH[node_type -> HASHABLE]
 inherit
-	HASH_TABLE[ARRAYED_SET[node_type], node_type]
+	HASH_TABLE[detachable ARRAYED_SET[node_type], node_type]
 		rename
 			make as init
 		end
@@ -53,5 +53,32 @@ feature
 			end
 	--	else Result := false
 	--	end
+	end
+
+	union(g1, g2:like Current) : like Current
+	require
+		g1 /= Void and g2 /= Void
+	local
+		retval : like Current
+		edges : ARRAYED_SET[node_type]
+		edges2 : ARRAYED_SET[node_type]
+	do
+		create retval.init (g1.capacity+g2.capacity)
+		retval.copy (g1)
+		across
+			g2.keys as k2
+		loop
+			if retval.has (k2.item) then
+				edges := retval.at (k2.item)
+				edges2 := g2.at (k2.item)
+				if edges /= Void and edges2 /= Void then
+					edges.merge (edges2.linear_representation)
+				end
+			else
+				retval.put (edges2, k2.item)
+			end
+		end
+
+		Result := retval
 	end
 end
