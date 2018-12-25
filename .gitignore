@@ -1,5 +1,5 @@
 *.log
 
 #Ignore everything in EIFGENs, except the Diagrams subdirectory
-EIFGENs/**/*
-!EIFGENs/*/Diagrams/
+**/EIFGENs/**/*
+!**/EIFGENs/*/Diagrams/
