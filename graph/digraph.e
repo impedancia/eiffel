@@ -81,4 +81,51 @@ feature
 
 		Result := retval
 	end
+
+	bejaras(agens : DFSAGENT[node_type])
+	local
+		solution : ARRAYED_QUEUE[node_type]
+		c_key :node_type
+		c_node : ARRAYED_LIST[node_type]
+		cnt : INTEGER
+	do
+		create solution.make(current.keys.count)
+		print("mélységi bejárás%N")
+		agens.put (current.keys.at (0))
+		from
+		until
+			solution.count = keys.count
+		loop
+			c_key := agens.item
+			agens.remove
+
+			solution.put (c_key)
+			c_node := at (c_key)
+
+			if c_node /= void then
+				across
+					 c_node.new_cursor.reversed as i
+				loop
+					c_key := i.item
+					agens.put (c_key)
+				end
+			end
+		end
+		print("bejárás:%N")
+		across 0 |..| (solution.count-1) as s
+		loop
+
+
+			print(solution.item)
+			print(":")
+			print(solution.count)
+			solution.remove
+			--if solution.count > 0 then
+
+			--end
+
+			print("%N")
+		end
+
+	end
 end
