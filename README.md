@@ -1,9 +1,9 @@
-#Eiffel ZH - 2012. január 19.
+# Eiffel ZH - 2012. január 19.
 
 A feladat egy irányított gráfot reprezentáló adattípus implementálása. Az alapfeladat elvégzése után a
 feladatok tetszőleges sorrendben elvégezhetőek. Minden jól megoldott feladat +1 jegyet ér.
 
-##Alapfeladat
+## Alapfeladat
 
 Készítsünk egy DIGRAPH osztályt, amely egy irányított gráfot ábrázol. A gráf csúcspontjaiban tárolt elemek
 típusát sablonparaméterként kapjuk. Ez az elemtípus HASHABLE kell legyen. A gráfot ábrázoljuk hasítótáblával
@@ -16,35 +16,35 @@ Biztosítsuk azt, hogy élet csak akkor tudunk létrehozni, ha a végpontjai ebb
 A gráf a creation feature-ét örökölje a hasítótáblából (csak nevezzük át init-nek!), amely
 paraméterként a hasítótábla kapacitását kapja.
 
-##Irányítatlan gráf
+## Irányítatlan gráf
 Készítsünk egy olyan GRAPH osztályt, amelyet a DIGRAPH osztályból származtatunk, és egy irányítatlan gráfot
 valósít meg. Ezt úgy érhetjük el, hogy az élet mindkét irányba felvesszük.
 
-##Unió
+## Unió
 Készítsünk olyan creation feature-t a DIGRAPH osztályban, amely két gráfot kap paraméterként, és egy olyat
 hoz létre, amely a két paraméter uniója. A típushelyesség biztosítása mellett (azaz egy irányítatlan gráf nem
 kaphat irányított gráfot) oldjuk meg, hogy az implementációt ne kelljen felüldefiniálni a GRAPH osztályban.
 
-##Bejárás
+## Bejárás
 Készítsünk egy feature-t, amely a gráf mélységi bejárását végezi el. A feature egy ágenst kap paraméterben,
 és ezt az ágenst hívja meg minden csúcsra a bejárás során.
 
 Jó munkát!
 
 
-#Racionális számok
+# Racionális számok
 
 Valósítsd meg a FRACTION osztályt, mely két egész számból álló törtek reprezentálására szolgál. A számlálót a
 numerator, a nevezőt a denominator mező ábrázolja. A nevező nem lehet nulla. Egy törtet lehessen make
 eljárással inicializálni, melynek két paramétere a számláló és a nevező legyen. Egy másik létrehozó eljárás a
 from_integer legyen, mely egy egész számot vár paraméterként, és ez lesz a számláló (a nevező pedig egy).
 Készíts szorzás és osztás függvényt a FRACTION osztályhoz.
-
+```
 (create{FRACTION}.from_integer(4))
 .divided_by(
  (create{FRACTION}.from_integer(2)).times(create{FRACTION}.make(6,4))
  )
-
+```
 Definiáljuk felül az is_equal és out műveleteket értelemszerűen.
 
 Tartalmazzon a FRACTION osztály egy simplify eljárást is, amely leegyszerűsíti a törtet: a nevező pozitív lesz,
@@ -64,7 +64,7 @@ műveletek legyen nyilvánosak.
 Készíts főprogramot, amelyben teszteled a FRACTION osztályt. A főprogram neve legyen APPLICATION.make. A
 projektfájlban legyen bekapcsolva az összes szerződésellenőrzés.
 
-##Nehezítések
+## Nehezítések
 
 Legyen a FRACTION osztály nem referenciával ábrázolt osztály.
 Legyen az osztály öninicializáló (self-initializing), és a kezdőértéke legyen 0 / 1.
@@ -72,7 +72,7 @@ A szorzás és osztás műveletek legyenek operátorként is használhatók.
 Konvertálódjanak az egész számok FRACTION-re.
 4 / (2 * create{FRACTION}.make(6,4))
 
-##Komolyabb nehezítés
+## Komolyabb nehezítés
 
 Készítsd el a RATIONAL osztályt, mely privát (non-konform módon) örököl a FRACTION osztályból. A racionális
 számok mindig leegyszerűsítve legyenek ábrázolva. A FRACTION objektumok konvertálódjanak RATIONAL
