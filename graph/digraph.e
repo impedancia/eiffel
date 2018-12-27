@@ -83,6 +83,8 @@ feature
 	end
 
 	bejaras(agens : DFSAGENT[node_type])
+	require
+			agens /= Void
 	local
 		solution : ARRAYED_QUEUE[node_type]
 		c_key :node_type
@@ -93,6 +95,8 @@ feature
 		print("mélységi bejárás%N")
 		agens.put (current.keys.at (0))
 		from
+		invariant
+			agens.count + solution.count <= keys.count
 		until
 			solution.count = keys.count
 		loop
@@ -104,12 +108,18 @@ feature
 
 			if c_node /= void then
 				across
-					 c_node.new_cursor.reversed as i
+					c_node.new_cursor.reversed as i
+				invariant
+					agens.count <= keys.count
 				loop
 					c_key := i.item
 					agens.put (c_key)
+				variant
+					keys.count - agens.count
 				end
 			end
+		variant
+			keys.count - solution.count
 		end
 		print("bejárás:%N")
 		across 0 |..| (solution.count-1) as s
