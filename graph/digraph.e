@@ -96,7 +96,7 @@ feature
 		agens.put (current.keys.at (0))
 		from
 		invariant
-			agens.count + solution.count <= keys.count
+			agens.count + solution.count <= keys.count *2
 		until
 			solution.count = keys.count
 		loop

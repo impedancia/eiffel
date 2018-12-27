@@ -17,7 +17,7 @@ feature {NONE} -- Initialization
 
 	make
 		local
-			graph : DIGRAPH[INTEGER]
+			graph : GRAPH[INTEGER]
 			graph2 : GRAPH[INTEGER]
 			dfs : DFSAGENT[INTEGER]
 			-- Run application.
