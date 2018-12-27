@@ -109,13 +109,20 @@ feature
 			if c_node /= void then
 				across
 					c_node.new_cursor.reversed as i
+				from
+					cnt := 0
 				invariant
 					agens.count <= keys.count
 				loop
 					c_key := i.item
-					agens.put (c_key)
+					if not solution.has (c_key) then
+						agens.put (c_key)
+					else
+						cnt := cnt + 1
+					end
+
 				variant
-					keys.count - agens.count
+					keys.count - agens.count -cnt
 				end
 			end
 		variant
