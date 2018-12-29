@@ -4,19 +4,20 @@ note
 	date: "$Date$"
 	revision: "$Revision$"
 
-class
+expanded class
 	FRACTION
 inherit
 	COMPARABLE
 	redefine
 		is_equal,
 		out,
-		is_less
-
+		is_less,
+		default_create
 	end
 create
-	make, from_integer
-
+	make, from_integer, default_create
+convert
+	from_integer({INTEGER})
 feature {NONE} -- Initialization
 	from_integer(int : INTEGER)
 	do
@@ -30,42 +31,53 @@ feature {NONE} -- Initialization
 			denominator := denom
 
 		end
+	default_create
+	do
+		numerator := 0
+		denominator := 1
+	end
 feature
-	divided_by(other : like current) : like current
+	divided_by alias "/"(other : like current) : like current
 	require
 		other.getnumerator /= 0
+	local
+		ret : like current
 	do
-		numerator := numerator * other.getdenominator
-		denominator := denominator *other.getnumerator
-		Result := current
+		create ret.make (numerator * other.getdenominator, denominator *other.getnumerator)
+		Result := ret
 	end
-	times(other : like current) : like current
+	times alias "*"(other : like current) : like current
+	local
+		ret : like current
 	do
-		numerator := numerator * other.getnumerator
-		denominator := denominator *other.getdenominator
-		Result := current
+		create ret.make (numerator * other.getnumerator, denominator *other.getdenominator)
+		Result := ret
 	end
 
 	simplify : like current
 	local
 		lnko : INTEGER
+		ret : like current
+		newnum : INTEGER
+		newdenom : INTEGER
 	do
 		lnko := gcd(numerator, denominator)
-		numerator := numerator // lnko
-		denominator := denominator // lnko
-		if denominator < 0 then
-			denominator := denominator * -1
-			numerator := numerator * -1
+		newnum := numerator // lnko
+		newdenom := denominator // lnko
+		if newdenom < 0 then
+			newdenom := newdenom * -1
+			newnum := newnum * -1
 		end
-		if numerator = 0 then
-			denominator := 1
+		if newnum = 0 then
+			newdenom := 1
 
 		end
-		Result := Current
+		create ret.make(newnum, newdenom)
+		Result := ret
 	ensure
-		denominator > 0
-		and (numerator = 0 implies denominator = 1)
-		and gcd (numerator, denominator ) = 1
+		Result.getdenominator > 0
+		and (Result.getnumerator = 0 implies Result.getdenominator = 1)
+		and gcd (Result.getnumerator, Result.getdenominator ) = 1
 	end
 feature {FRACTION}
 	gcd(a:INTEGER b : INTEGER) : INTEGER
@@ -93,7 +105,6 @@ feature {FRACTION}
 	ensure
 		a \\ Result = 0 and b \\ Result = 0
 	end
-
 feature
 	getNumerator : INTEGER
 	do
@@ -134,7 +145,13 @@ feature
 	end
 feature {NONE}
 	numerator : INTEGER
+		attribute
+			Result := 0
+		end
 	denominator : INTEGER
+		attribute
+			Result := 1
+		end
 invariant
 	denominator /= 0
 end

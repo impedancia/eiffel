@@ -22,6 +22,7 @@ feature {NONE} -- Initialization
 			f4 : FRACTION
 			f5 : FRACTION
 			res : FRACTION
+			r1 : RATIONAL
 		do
 			create f1.from_integer (4)
 			create f2.from_integer (2)
@@ -38,6 +39,14 @@ feature {NONE} -- Initialization
 			create f5.make (0,-123)
 			f5 := f5.simplify
 			print("simplified: " + f5.out + "%N")
+			print("f3: " + f3.out + "%N")
+			print("f4: " + f4.out + "%N")
+			res := f3 * f4
+			print("times (*) f4 * f3: " + res.out + "%N")
+			print((4 / (2 * create{FRACTION}.make(6,4))).out + "%N")
+			create r1.from_fraction (f3)
+			print("f3: " + f3.out + "%N")
+			print("r1: " + r1.out + "%N")
 		end
 
 
