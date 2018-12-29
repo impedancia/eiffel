@@ -78,14 +78,20 @@ feature {FRACTION}
 		b_ := b
 		from
 			rem := b
+		invariant
+			rem > 0 implies (a \\ rem = 0 and b \\ rem = 0)
 		until
 			rem = 0
 		loop
 			rem := a_ \\ b_
 			a_ := b_
 			b_ := rem
+		variant
+			rem.abs
 		end
 		Result := a_;
+	ensure
+		a \\ Result = 0 and b \\ Result = 0
 	end
 
 feature
@@ -111,10 +117,15 @@ feature
 	is_equal(other : like current) : BOOLEAN
 	require else
 		other /= Void
+	local
+		s1 : FRACTION
+		s2 : FRACTION
 	do
 		Result := TRUE
-		if numerator /= other.getnumerator then Result := FALSE end
-		if denominator /= other.getdenominator then Result := FALSE end
+		s1 := current.simplify
+		s2 := other.simplify
+		if s1.getnumerator /= s2.getnumerator then Result := FALSE end
+		if s1.getdenominator /= s2.getdenominator then Result := FALSE end
 	end
 	out : STRING_8
 	do
@@ -125,6 +136,5 @@ feature {NONE}
 	numerator : INTEGER
 	denominator : INTEGER
 invariant
-	invariant_clause: denominator /= 0
-
+	denominator /= 0
 end
