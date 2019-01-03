@@ -1,4 +1,4 @@
-note
+﻿note
 	description: "Summary description for {FRACTION}."
 	author: ""
 	date: "$Date$"
@@ -43,7 +43,7 @@ feature
 	local
 		ret : like current
 	do
-		create ret.make (numerator * other.getdenominator, denominator *other.getnumerator)
+		create ret.make (numerator * other.getdenominator, denominator * other.getnumerator)
 		Result := ret
 	end
 	times alias "*"(other : like current) : like current
@@ -53,7 +53,6 @@ feature
 		create ret.make (numerator * other.getnumerator, denominator *other.getdenominator)
 		Result := ret
 	end
-
 	simplify : like current
 	local
 		lnko : INTEGER
@@ -61,47 +60,64 @@ feature
 		newnum : INTEGER
 		newdenom : INTEGER
 	do
-		lnko := gcd(numerator, denominator)
-		newnum := numerator // lnko
-		newdenom := denominator // lnko
-		if newdenom < 0 then
-			newdenom := newdenom * -1
-			newnum := newnum * -1
+		if numerator = 0 then
+			create ret.make(0,1)
+			Result := ret
+		else
+			lnko := gcd(numerator, denominator)
+			newnum := numerator // lnko
+			newdenom := denominator // lnko
+			if newdenom < 0 then
+				newdenom := newdenom * -1
+				newnum := newnum * -1
+			end
+			create ret.make(newnum, newdenom)
+			Result := ret
 		end
-		if newnum = 0 then
-			newdenom := 1
-
-		end
-		create ret.make(newnum, newdenom)
-		Result := ret
 	ensure
 		Result.getdenominator > 0
 		and (Result.getnumerator = 0 implies Result.getdenominator = 1)
 		and gcd (Result.getnumerator, Result.getdenominator ) = 1
 	end
 feature {FRACTION}
+	is_simplified : BOOLEAN
+	do
+		Result :=  gcd(numerator,denominator) = 1
+	end
 	gcd(a:INTEGER b : INTEGER) : INTEGER
 	local
 		rem : INTEGER
 		a_ : INTEGER
 		b_ : INTEGER
 	do
-		a_ := a
-		b_ := b
-		from
-			rem := b
-		invariant
-			rem > 0 implies (a \\ rem = 0 and b \\ rem = 0)
-		until
-			rem = 0
-		loop
-			rem := a_ \\ b_
-			a_ := b_
-			b_ := rem
-		variant
-			rem.abs
+		if a = 0 then
+			Result := b
+		else
+			if b = 0 then
+				Result := a
+
+		else
+			a_ := a.abs
+			b_ := b.abs
+			--from
+			--	rem := b
+			from
+			invariant
+				gcd(a,b) = gcd(a_,b_)
+			until
+				a_ = b_
+			loop
+				if a_ > b_ then
+					a_ :=  a_ - b_
+				else
+					b_ := b_ -a_
+				end
+			variant
+				a_ + b_
+			end
+			Result := a_;
 		end
-		Result := a_;
+		end
 	ensure
 		a \\ Result = 0 and b \\ Result = 0
 	end
@@ -133,8 +149,18 @@ feature
 		s2 : FRACTION
 	do
 		Result := TRUE
-		s1 := current.simplify
-		s2 := other.simplify
+		if current.is_simplified then
+			s1 := current
+		else
+			s1 := current.simplify
+		end
+		if other.is_simplified then
+			s2 := other
+		else
+			s2 := other.simplify
+		end
+
+
 		if s1.getnumerator /= s2.getnumerator then Result := FALSE end
 		if s1.getdenominator /= s2.getdenominator then Result := FALSE end
 	end
